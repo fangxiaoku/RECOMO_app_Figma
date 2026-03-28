@@ -1,9 +1,15 @@
 import { useState } from 'react';
 import { CameraControl3D } from './components/CameraControl3D';
+import { TrajectoryLibrary } from './components/TrajectoryLibrary';
 import { Settings, Battery, Wifi, Menu, Camera, Video, Image as ImageIcon } from 'lucide-react'; // Need to install lucide-react
 
 export default function App() {
   const [mode, setMode] = useState<'photo' | 'video'>('video');
+  const [showLibrary, setShowLibrary] = useState(false);
+
+  if (showLibrary) {
+    return <TrajectoryLibrary onBack={() => setShowLibrary(false)} />;
+  }
 
   return (
     <div className="flex flex-col h-screen w-full bg-black text-white font-sans overflow-hidden">
@@ -11,7 +17,7 @@ export default function App() {
       <header className="flex justify-between items-center px-4 py-2 bg-black/80 z-10 text-sm">
         <div className="flex items-center space-x-2">
           <Menu className="w-5 h-5 text-gray-300" />
-          <span className="font-bold tracking-wider text-xl bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">RECOMO</span>
+          <img src="/recomo-logo.png" alt="Recomo Logo" className="h-8 object-contain" />
         </div>
 
         <div className="flex items-center space-x-4 text-gray-300">
@@ -88,8 +94,11 @@ export default function App() {
 
       {/* Bottom Control Bar */}
       <footer className="h-24 bg-black/90 border-t border-zinc-900 flex items-center justify-between px-8">
-        {/* Gallery / Media */}
-        <button className="w-12 h-12 rounded-full border border-zinc-700 bg-zinc-800 overflow-hidden relative flex items-center justify-center hover:border-gray-500 transition">
+        {/* Gallery / Media / Trajectory Library */}
+        <button
+          onClick={() => setShowLibrary(true)}
+          className="w-12 h-12 rounded-full border border-zinc-700 bg-zinc-800 overflow-hidden relative flex items-center justify-center hover:border-gray-500 transition"
+        >
            <ImageIcon className="w-5 h-5 text-gray-400" />
         </button>
 
