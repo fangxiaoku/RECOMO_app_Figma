@@ -1,14 +1,19 @@
 import { useState } from 'react';
 import { CameraControl3D } from './components/CameraControl3D';
 import { TrajectoryLibrary } from './components/TrajectoryLibrary';
-import { Settings, Battery, Wifi, Menu, Camera, Video, Image as ImageIcon } from 'lucide-react'; // Need to install lucide-react
+import { MotionCreation } from './components/MotionCreation';
+import { Settings, Battery, Wifi, Menu, Camera, Image as ImageIcon } from 'lucide-react'; // Need to install lucide-react
 
 export default function App() {
   const [mode, setMode] = useState<'photo' | 'video'>('video');
-  const [showLibrary, setShowLibrary] = useState(false);
+  const [currentView, setCurrentView] = useState<'viewfinder' | 'library' | 'create-trajectory'>('viewfinder');
 
-  if (showLibrary) {
-    return <TrajectoryLibrary onBack={() => setShowLibrary(false)} />;
+  if (currentView === 'library') {
+    return <TrajectoryLibrary onBack={() => setCurrentView('viewfinder')} onCreateNew={() => setCurrentView('create-trajectory')} />;
+  }
+
+  if (currentView === 'create-trajectory') {
+    return <MotionCreation onBack={() => setCurrentView('library')} />;
   }
 
   return (
@@ -96,7 +101,7 @@ export default function App() {
       <footer className="h-24 bg-black/90 border-t border-zinc-900 flex items-center justify-between px-8">
         {/* Gallery / Media / Trajectory Library */}
         <button
-          onClick={() => setShowLibrary(true)}
+          onClick={() => setCurrentView('library')}
           className="w-12 h-12 rounded-full border border-zinc-700 bg-zinc-800 overflow-hidden relative flex items-center justify-center hover:border-gray-500 transition"
         >
            <ImageIcon className="w-5 h-5 text-gray-400" />

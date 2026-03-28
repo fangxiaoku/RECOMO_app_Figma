@@ -1,5 +1,5 @@
 import React from 'react';
-import { Plus, LayoutGrid, Package, Home, Mic2, Film, Map as MapIcon, Search, Play, Edit3, Trash2, ArrowLeft, Clock, MapPin } from 'lucide-react';
+import { Plus, LayoutGrid, Package, Home, Mic2, Film, Map as MapIcon, Search, Play, Trash2, ArrowLeft, Clock, MapPin } from 'lucide-react';
 
 const CATEGORIES = [
   { id: 'all', name: '全部', icon: LayoutGrid, count: 6 },
@@ -19,7 +19,7 @@ const TRAJECTORIES = [
   { id: 6, title: 'Studio Tour', duration: '45s', points: 15, bg: 'bg-gradient-to-br from-cyan-400 to-blue-500' },
 ];
 
-export function TrajectoryLibrary({ onBack }: { onBack?: () => void }) {
+export function TrajectoryLibrary({ onBack, onCreateNew }: { onBack?: () => void, onCreateNew?: () => void }) {
   const [activeCategory, setActiveCategory] = React.useState('all');
 
   return (
@@ -34,7 +34,7 @@ export function TrajectoryLibrary({ onBack }: { onBack?: () => void }) {
           <span className="text-xl font-semibold text-white">轨迹库</span>
         </div>
 
-        <button className="w-full bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl py-3 flex items-center justify-center space-x-2 font-medium transition shadow-lg shadow-indigo-500/20 mb-8">
+        <button onClick={onCreateNew} className="w-full bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl py-3 flex items-center justify-center space-x-2 font-medium transition shadow-lg shadow-indigo-500/20 mb-8">
           <Plus className="w-5 h-5" />
           <span>新建轨迹</span>
         </button>
