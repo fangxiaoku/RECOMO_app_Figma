@@ -11,11 +11,12 @@ env:
   GAR_LOCATION: us-central1 # Replace with your Artifact Registry region
   REPOSITORY: your-repository-name # Replace with your Artifact Registry repository name
   IMAGE: your-image-name # Replace with your desired image name
+  SERVICE_NAME: your-cloud-run-service-name # Replace with your desired Cloud Run service name
   WORKLOAD_IDENTITY_PROVIDER: projects/1234567890/locations/global/workloadIdentityPools/my-pool/providers/my-provider # Replace with your WIF provider
   SERVICE_ACCOUNT: my-service-account@your-gcp-project-id.iam.gserviceaccount.com # Replace with your service account email
 
 jobs:
-  build-and-push:
+  build-push-and-deploy:
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'
@@ -54,6 +55,7 @@ jobs:
             latest
 
       - name: Build and push Docker image
+        id: build-push
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -62,3 +64,16 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Deploy to Cloud Run
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: ${{ env.SERVICE_NAME }}
+          region: ${{ env.REGION }}
+          # Use the exact digest for immutable deployment
+          image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}@${{ steps.build-push.outputs.digest }}
+          flags: '--allow-unauthenticated'
+
+      - name: Show Output URL
+        run: echo "Successfully deployed! Access the application at ${{ steps.deploy.outputs.url }}"
