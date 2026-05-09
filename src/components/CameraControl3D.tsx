@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 interface CameraControl3DProps {
   onPositionChange?: (position: { x: number; y: number; z: number }) => void;
@@ -7,7 +7,6 @@ interface CameraControl3DProps {
 
 export function CameraControl3D({ onPositionChange, onRotationChange }: CameraControl3DProps) {
   const [activeControl, setActiveControl] = useState<string | null>(null);
-  const canvasRef = useRef<HTMLDivElement>(null);
 
   // Camera position (translation)
   const [position, setPosition] = useState({ x: 0, y: 0, z: 0 });
@@ -106,7 +105,7 @@ export function CameraControl3D({ onPositionChange, onRotationChange }: CameraCo
 
   return (
     <div className="relative w-full aspect-square bg-gray-900 rounded-lg overflow-hidden select-none">
-      <div ref={canvasRef} className="absolute inset-0">
+      <div className="absolute inset-0">
         {/* Center Circle */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 border-4 border-blue-500 rounded-full flex items-center justify-center">
           <div className="text-center text-white">
